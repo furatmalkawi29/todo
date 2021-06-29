@@ -1,20 +1,9 @@
 import React, {useState} from 'react';
+import useForm from '../../hooks/useForm'
 
 function TodoForm (props) {
 
-const [item, setItem] = useState({}) ;
-
-const handleInputChange = e => {
-    setItem( {...item, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    e.target.reset();
-    props.handleSubmit(item);
-    const myItem = {};
-    setItem(myItem);
-  };
+const [item,setItem,handleInputChange,handleSubmit]=useForm(props.handleSubmit);
 
     return (
       <>
@@ -38,9 +27,7 @@ const handleInputChange = e => {
             <input
  type="text" name="assignee" placeholder="Assigned To" onChange={handleInputChange} />
           </label>
-          <button id="add">Add Item</button>
-          <button type="button" id="edit"  style ={{display: "none"}}>Edit Item</button>
-
+          <button>Add Item</button>
         </form>
       </>
     );
