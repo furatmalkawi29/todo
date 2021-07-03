@@ -1,10 +1,23 @@
-import React from 'react';
+import React , {useContext} from 'react';
+import {SettingsContext}  from '../../context/settings-context';
+
 
 function TodoList (props){
+let {incomplete, taskNumber} = useContext(SettingsContext);
 
+  //bring array of incomplete tasks
+let incompleteArr = props.list.filter(item => item["complete"])
+// render complete / incomplete?
+let renderArr = incomplete? props.list : incompleteArr;
+
+
+//limit tasks number
+let tasksLeftArr = renderArr.filter((item,index) => index<taskNumber);
+
+console.log(tasksLeftArr);
     return (
       <ul>
-        {props.list.map(item => (
+        {renderArr.map(item => (
           <li
             className={`complete-${item.complete.toString()}`}
             key={item._id}
