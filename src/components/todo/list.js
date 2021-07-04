@@ -1,10 +1,57 @@
-import React from 'react';
+import React , {useContext} from 'react';
+import {SettingsContext}  from '../../context/settings-context';
 
 function TodoList (props){
+  let {incomplete, taskNumber} = useContext(SettingsContext);
+  let renderArr;
+
+  //bring array of incomplete tasks (default)
+let incompleteArr = props.list.filter(item => !item["complete"])
+// 1] render complete / incomplete?
+ renderArr = incomplete? props.list : incompleteArr;
+
+
+//2] limit tasks number
+let tasksLeftArr = renderArr.filter((item,index) => index<taskNumber);
+// render tasks when number changed 
+ renderArr = taskNumber? tasksLeftArr : renderArr;
+
+
+
+
+// 3] sort tasks 
+
+ //difficulty / complete (false < true)
+ function sortNum (a, b) {
+  return a[props.sort] - b[props.sort];
+ }
+
+ 
+ //text //assignee
+function sortStr(a, b) {
+  
+  if(a[props.sort]&&b[props.sort]){ //in case they were empty (undefined)
+  var textA = a[props.sort].toUpperCase(); 
+  var textB = b[props.sort].toUpperCase(); 
+  if (textA < textB) {
+    return -1;
+  }
+  if (textA > textB) {
+    return 1;
+  }
+  return 0;
+}}
+
+if(props.sort ==="difficulty" || props.sort ==="complete")
+ renderArr.sort(sortNum); 
+else 
+renderArr.sort(sortStr); 
+
+
 
     return (
       <ul>
-        {props.list.map(item => (
+        {renderArr.map(item => (
           <li
             className={`complete-${item.complete.toString()}`}
             key={item._id}
